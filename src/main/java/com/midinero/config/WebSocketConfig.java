@@ -12,13 +12,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/user");
+        // Destinos que atiende el broker en memoria (suscripciones)
+        config.enableSimpleBroker("/queue", "/topic");
+        // Prefijo para endpoints @MessageMapping del lado servidor
         config.setApplicationDestinationPrefixes("/app");
+        // Prefijo lógico para destinos por-usuario (/user/queue/...)
         config.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Debe coincidir con tu cliente (https://midinero-back.onrender.com/ws)
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
